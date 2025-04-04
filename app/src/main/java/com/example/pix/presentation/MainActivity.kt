@@ -1,15 +1,10 @@
 package com.example.pix.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pix.R
-import com.example.pix.data.flickr.FlickrRepositoryImpl
 import com.example.pix.databinding.MainActivityBinding
-import com.example.pix.domain.entity.LoadDataUseCase
 import com.example.pix.presentation.adapters.PictureListAdapter
 
 class MainActivity : ComponentActivity() {
@@ -32,8 +27,8 @@ class MainActivity : ComponentActivity() {
 
     private fun setupRecyclerView() {
         pictureAdapter = PictureListAdapter()
-        binding.rvPicture.adapter = pictureAdapter
-        binding.rvPicture.layoutManager = GridLayoutManager(this, 1)
+        binding.rvPictures.adapter = pictureAdapter
+        binding.rvPictures.layoutManager = GridLayoutManager(this, 3)
     }
 
 
