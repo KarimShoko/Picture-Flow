@@ -19,7 +19,7 @@ class PictureListAdapter() :
 
     override fun onBindViewHolder(holder: PictureViewHolder, position: Int) {
         val item = getItem(position)
-        Picasso.get().load(item.url).into(holder.binding.imageViewPicture)
+        Picasso.get().load(item.url).into(holder.binding.ivPicture)
     }
 }
 

@@ -29,6 +29,6 @@ class FlickrRepositoryImpl(
 
 
     override fun getPictureList(): LiveData<List<Picture>> {
-       return pictureDao.getAll().map { it.map { it.toEntity() } }
+        return pictureDao.getAll().map { it.map { it.toEntity() } }
     }
 }
