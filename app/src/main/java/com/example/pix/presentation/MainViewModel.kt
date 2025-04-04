@@ -16,7 +16,9 @@ import kotlinx.coroutines.launch
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     val repository = FlickrRepositoryImpl(application)
     val loadDataUseCase = LoadDataUseCase(repository)
-    val getPictureListUseCase = GetPictureListUseCase(repository)
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
 
     private val _pictures = MutableLiveData<List<Picture>>()
     val pictures: LiveData<List<Picture>> = _pictures
@@ -24,9 +26,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    val pictureList = getPictureListUseCase()
     init {
         viewModelScope.launch {
+            _isLoading.value = true
             val result = loadDataUseCase()
             result
                 .onSuccess { data ->
@@ -37,6 +39,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     _error.value = throwable.message ?: "Unknown error"
                     Log.e("MainViewModel", "Ошибка при загрузке: ${throwable.message}")
                 }
+            _isLoading.value = false  // Скрываем прогресс
         }
     }
 }
