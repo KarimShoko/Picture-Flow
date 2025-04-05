@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,18 +16,19 @@ import com.example.pix.R
 import com.example.pix.databinding.ActivityDetailPictureBinding
 import com.example.pix.databinding.MainActivityBinding
 import com.squareup.picasso.Picasso
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailPictureActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailPictureBinding
-    private lateinit var viewModel: DetailPictureViewModel
+    private val viewModel: DetailPictureViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityDetailPictureBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this)[DetailPictureViewModel::class.java]
         val pictureUrl = intent.getStringExtra(EXTRA_PICTURE_URL)
 
         pictureUrl?.let {
@@ -34,6 +36,7 @@ class DetailPictureActivity : AppCompatActivity() {
         }
 
         viewModel.maxResolutionUrl.observe(this) {
+            Log.d("TEST", it)
             Picasso.get().load(it).into(binding.ivDetailPicture)
         }
     }
