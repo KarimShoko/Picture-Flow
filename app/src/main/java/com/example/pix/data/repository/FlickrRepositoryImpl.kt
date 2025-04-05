@@ -1,14 +1,13 @@
-package com.example.pix.data.flickr
+package com.example.pix.data.repository
 
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
-import com.example.pix.data.flickr.dto.FlickrResult
+import com.example.pix.data.flickr.ApiFactory
 import com.example.pix.data.flickr.mapper.toDb
 import com.example.pix.data.flickr.mapper.toEntity
 import com.example.pix.data.room.PictureDatabase
-import com.example.pix.data.room.PictureDbo
 import com.example.pix.domain.entity.FlickrRepository
 import com.example.pix.domain.entity.Picture
 
@@ -27,6 +26,9 @@ class FlickrRepositoryImpl(
         pictures
     }
 
+    override suspend fun loadDetailPicture(): Picture {
+        TODO("Not yet implemented")
+    }
 
     override fun getPictureList(): LiveData<List<Picture>> {
         return pictureDao.getAll().map { it.map { it.toEntity() } }

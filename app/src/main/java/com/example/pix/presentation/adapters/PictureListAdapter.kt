@@ -10,6 +10,9 @@ import com.squareup.picasso.Picasso
 class PictureListAdapter() :
     ListAdapter<Picture, PictureViewHolder>(PictureDiffCallback) {
 
+    var onPictureClickListener: ((Picture) -> Unit)? = null
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PictureViewHolder {
         val binding = PictureItemBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
@@ -20,6 +23,9 @@ class PictureListAdapter() :
     override fun onBindViewHolder(holder: PictureViewHolder, position: Int) {
         val item = getItem(position)
         Picasso.get().load(item.url).into(holder.binding.ivPicture)
+        holder.binding.root.setOnClickListener {
+            onPictureClickListener?.invoke(item)
+        }
     }
 }
 
