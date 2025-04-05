@@ -5,10 +5,8 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pix.data.flickr.FlickrRepositoryImpl
-import com.example.pix.domain.entity.GetPictureListUseCase
+import com.example.pix.data.repository.FlickrRepositoryImpl
 import com.example.pix.domain.entity.LoadDataUseCase
 import com.example.pix.domain.entity.Picture
 import kotlinx.coroutines.launch
@@ -39,7 +37,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     _error.value = throwable.message ?: "Unknown error"
                     Log.e("MainViewModel", "Ошибка при загрузке: ${throwable.message}")
                 }
-            _isLoading.value = false  // Скрываем прогресс
+            _isLoading.value = false
         }
     }
 }

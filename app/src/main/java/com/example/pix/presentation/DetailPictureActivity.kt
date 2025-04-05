@@ -19,8 +19,6 @@ import com.squareup.picasso.Picasso
 class DetailPictureActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailPictureBinding
     private lateinit var viewModel: DetailPictureViewModel
-    private lateinit var scaleGestureDetector: ScaleGestureDetector
-    private var scaleFactor = 1.0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,36 +26,16 @@ class DetailPictureActivity : AppCompatActivity() {
         binding = ActivityDetailPictureBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(DetailPictureViewModel::class.java)
-
-
+        viewModel = ViewModelProvider(this)[DetailPictureViewModel::class.java]
         val pictureUrl = intent.getStringExtra(EXTRA_PICTURE_URL)
 
         pictureUrl?.let {
             viewModel.getMaxResolutionUrl(it)
         }
 
-
-        viewModel.maxResolutionUrl.observe(this) { url ->
-            Picasso.get().load(url).into(binding.ivDetailPicture)
+        viewModel.maxResolutionUrl.observe(this) {
+            Picasso.get().load(it).into(binding.ivDetailPicture)
         }
-
-
-        scaleGestureDetector = ScaleGestureDetector(this, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-            override fun onScale(detector: ScaleGestureDetector): Boolean {
-                scaleFactor *= detector.scaleFactor
-                scaleFactor = scaleFactor.coerceIn(0.1f, 10.0f)
-                binding.ivDetailPicture.scaleX = scaleFactor
-                binding.ivDetailPicture.scaleY = scaleFactor
-                return true
-            }
-        })
-    }
-
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        scaleGestureDetector.onTouchEvent(event)
-        return super.onTouchEvent(event)
     }
 
     companion object {
