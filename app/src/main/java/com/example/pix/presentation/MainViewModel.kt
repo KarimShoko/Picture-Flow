@@ -1,21 +1,18 @@
 package com.example.pix.presentation
 
-import android.app.Application
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pix.data.repository.FlickrRepositoryImpl
-import com.example.pix.domain.entity.LoadDataUseCase
 import com.example.pix.domain.entity.Picture
+import com.example.pix.domain.entity.usecases.LoadDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel  @Inject constructor(private val loadDataUseCase: LoadDataUseCase)  : ViewModel() {
+class MainViewModel @Inject constructor(private val loadDataUseCase: LoadDataUseCase) :
+    ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean>
@@ -36,7 +33,6 @@ class MainViewModel  @Inject constructor(private val loadDataUseCase: LoadDataUs
             result
                 .onSuccess { data ->
                     _pictures.value = data
-                    Log.d("MainViewModel", "Данных загружено: ${data.size}")
                 }
                 .onFailure { throwable ->
                     _error.value = true

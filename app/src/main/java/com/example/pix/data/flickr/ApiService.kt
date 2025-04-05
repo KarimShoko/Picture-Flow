@@ -16,6 +16,7 @@ interface ApiService {
     ): FlickrResult
 
     companion object {
-        private const val SEARCH_URL = "/services/rest/?method=flickr.photos.getRecent&api_key=da9d38d3dee82ec8dda8bb0763bf5d9c&format=json&nojsoncallback=1"
+        private const val SEARCH_URL =
+            "/services/rest/?method=flickr.photos.getRecent&api_key=da9d38d3dee82ec8dda8bb0763bf5d9c&format=json&nojsoncallback=1"
     }
 }

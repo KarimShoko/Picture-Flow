@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(entities = [PictureDbo::class], version = 1)
-abstract class PictureDatabase: RoomDatabase() {
+abstract class PictureDatabase : RoomDatabase() {
     companion object {
 
         private var db: PictureDatabase? = null
