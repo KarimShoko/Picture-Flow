@@ -1,12 +1,10 @@
 package com.example.pix.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.pix.databinding.MainActivityBinding
 import com.example.pix.presentation.adapters.PictureListAdapter
@@ -19,16 +17,17 @@ class MainActivity : ComponentActivity() {
     private lateinit var pictureAdapter: PictureListAdapter
     private val viewModel: MainViewModel by viewModels()
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupRecyclerView()
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
         viewModel.pictures.observe(this) {
             pictureAdapter.submitList(it)
-
         }
         viewModel.isLoading.observe(this) {
             if (it == true) {

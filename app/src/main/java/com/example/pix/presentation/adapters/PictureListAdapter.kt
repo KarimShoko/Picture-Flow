@@ -7,11 +7,9 @@ import com.example.pix.databinding.PictureItemBinding
 import com.example.pix.domain.entity.Picture
 import com.squareup.picasso.Picasso
 
-class PictureListAdapter() :
-    ListAdapter<Picture, PictureViewHolder>(PictureDiffCallback) {
+class PictureListAdapter() : ListAdapter<Picture, PictureViewHolder>(PictureDiffCallback) {
 
     var onPictureClickListener: ((Picture) -> Unit)? = null
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PictureViewHolder {
         val binding = PictureItemBinding.inflate(
