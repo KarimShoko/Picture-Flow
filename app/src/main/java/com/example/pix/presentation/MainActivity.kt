@@ -1,14 +1,19 @@
 package com.example.pix.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.pix.databinding.MainActivityBinding
 import com.example.pix.presentation.adapters.PictureListAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -26,19 +31,28 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.pictures.observe(this) {
-            pictureAdapter.submitList(it)
-        }
-        viewModel.isLoading.observe(this) {
-            if (it == true) {
-                binding.progressBarLoading.visibility = View.VISIBLE
-            } else {
-                binding.progressBarLoading.visibility = View.GONE
-            }
-        }
-        viewModel.error.observe(this) {
-            if (it == true) {
-                Toast.makeText(this, "Произошла ошибка", Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED){
+                viewModel.state.collect {
+                    when (it) {
+                        is PictureState.Error -> {
+                            binding.progressBarLoading.visibility = View.GONE
+                            binding.rvPictures.visibility = View.GONE
+                            Toast.makeText(this@MainActivity, "Ошибка при загрузке данных:${it.message}", Toast.LENGTH_LONG)
+                                .show()
+                        }
+                        PictureState.Progress -> {
+                            binding.progressBarLoading.visibility = View.VISIBLE
+                            binding.rvPictures.visibility = View.GONE
+                        }
+                        is PictureState.Result -> {
+                            binding.progressBarLoading.visibility = View.GONE
+                            binding.rvPictures.visibility = View.VISIBLE
+                            Log.d("MainActivity", "${it.cryptoInfo}")
+                            pictureAdapter.submitList(it.cryptoInfo)
+                        }
+                    }
+                }
             }
         }
     }

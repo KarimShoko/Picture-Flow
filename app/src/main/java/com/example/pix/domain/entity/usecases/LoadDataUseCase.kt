@@ -7,7 +7,5 @@ import javax.inject.Inject
 class LoadDataUseCase @Inject constructor(
     private val repository: FlickrRepository
 ) {
-    suspend operator fun invoke(): Result<List<Picture>> {
-        return repository.loadData()
-    }
+     operator fun invoke() = repository.loadData()
 }

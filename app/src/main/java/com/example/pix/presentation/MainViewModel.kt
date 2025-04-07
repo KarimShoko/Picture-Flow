@@ -1,43 +1,30 @@
 package com.example.pix.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pix.domain.entity.Picture
 import com.example.pix.domain.entity.usecases.LoadDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val loadDataUseCase: LoadDataUseCase) :
     ViewModel() {
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean>
-        get() = _isLoading
-
-    private val _pictures = MutableLiveData<List<Picture>>()
-    val pictures: LiveData<List<Picture>>
-        get() = _pictures
-
-    private val _error = MutableLiveData<Boolean>()
-    val error: LiveData<Boolean>
-        get() = _error
-
-    init {
-        viewModelScope.launch {
-            _isLoading.value = true
-            val result = loadDataUseCase()
-            result
-                .onSuccess { data ->
-                    _pictures.value = data
-                }
-                .onFailure { throwable ->
-                    _error.value = true
-                }
-            _isLoading.value = false
+    val state: StateFlow<PictureState> = loadDataUseCase()
+        .map {
+            PictureState.Result(it) as PictureState
         }
-    }
+        .catch {
+            emit(PictureState.Error( it.toString()))
+        }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.Lazily,
+            PictureState.Progress
+        )
 }

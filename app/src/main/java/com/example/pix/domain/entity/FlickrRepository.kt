@@ -1,6 +1,7 @@
 package com.example.pix.domain.entity
 
-interface FlickrRepository {
-    suspend fun loadData(): Result<List<Picture>>
+import kotlinx.coroutines.flow.Flow
 
+interface FlickrRepository {
+     fun loadData(): Flow<List<Picture>>
 }
